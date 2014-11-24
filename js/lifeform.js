@@ -1,4 +1,3 @@
-var LM = LM || {};
 
 LM.LifeForm = function(xLocation, yLocation, speed) {
     this.Location = {
@@ -26,7 +25,6 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
         }
     }
 
-<<<<<<< HEAD
     this.TurnLeft = function() { this.Direction.Turn(1); }
     this.TurnRight = function() { this.Direction.Turn(-1); }
 
@@ -38,13 +36,13 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
 
     this.MoveRandomly = function() {
         this.Move(this.RandomChange());
-=======
+    }
+    
     this.TurnLeft = function() { this.Direction.Turn(1); },
     this.TurnRight = function() { this.Direction.Turn(-1); },
 
     this.TurnRandomly = function() {
         this.Direction.Turn(Math.floor((Math.random() * 3) + 1) - 2);
->>>>>>> d51c83731eeefb3025cafa6cbe5a8f0f16448375
     }
 
     this.StepForward = function() {
@@ -59,6 +57,4 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
         this.Location.X += direction * this.Direction.WE() * this.Speed;
         this.Location.Y += direction * this.Direction.NS() * this.Speed;
     }
-
-
 }
