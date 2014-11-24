@@ -30,7 +30,14 @@ LM.Engine = {
         this.Player = new LM.LifeForm(250, 100, 5);
         this.NPC = new LM.LifeForm(350, 350, 5);
 
-        this.CharCircle = this.CreateCircle(250, 100, "blue", 2);
+        this.CharCircle = LM.CreateSprite(250, 100); //= this.CreateCircle(250, 100, "blue", 2);
+        
+        this.CharCircle.Update = function(X, Y) {
+            this.regX = X;
+            this.regY = Y;
+            LM.Engine.Stage.update();
+        }
+
         this.Stage.addChild(this.CharCircle);
 
         this.NPCCircle = this.CreateCircle(350, 350, "red");
@@ -54,6 +61,8 @@ LM.Engine = {
             if(event.keyCode == 97) LM.Engine.Player.TurnLeft();
             if(event.keyCode == 100) LM.Engine.Player.TurnRight();
         };
+
+
 
         this.Stage.update();
 
