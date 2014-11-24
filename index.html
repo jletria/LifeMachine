@@ -5,17 +5,14 @@
     <script src="js/dep/underscore.js"></script>
     <script src="js/dep/angular.min.js"></script>
     <script src="js/dep/createjs.min.js"></script>
+    
+    <script src="js/lmEngine.js"></script>
+    <script src="js/lifeform.js"></script>
     <script src="js/lifemachine.js"></script>
-    <script>
-        function init() {
-            alert('Hello!')
-        }
-    </script>
+
 </head>
-<body onLoad="init();">
-    <canvas id="demoCanvas" width="500" height="300">
-        alternate content
-    </canvas>
+<body onLoad="LM.Init();">
+    <canvas id="lmStage" width="600" height="900">Something's wrong</canvas>
 </body>
 </html>
 
