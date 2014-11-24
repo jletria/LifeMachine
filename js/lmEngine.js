@@ -39,9 +39,7 @@ LM.Engine = {
         createjs.Ticker.setInterval(60);
 
         createjs.Ticker.addEventListener("tick", function(event) {
-
             //console.log(createjs.Ticker.getTicks());
-
             LM.Engine.NPC.TurnRandomly();
             LM.Engine.NPC.StepForward();
             LM.Engine.NPCCircle.Update(LM.Engine.NPC.Location.X, LM.Engine.NPC.Location.Y);
