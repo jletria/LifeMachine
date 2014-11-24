@@ -4,7 +4,7 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
         X : xLocation,
         Y : yLocation
     }
-    
+
     this.Health = 100;
     this.Speed = speed;
     this.Damage = 5;
@@ -17,7 +17,7 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
 
         NS: function() { return this.nsa[this.directionindex]; },
         WE: function() { return this.wea[this.directionindex]; },
-      
+
         Turn: function(direction) {
             this.directionindex += direction;
             if(this.directionindex == 8) this.directionindex = 0;
@@ -28,6 +28,11 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
     this.TurnLeft = function() { this.Direction.Turn(1); }
     this.TurnRight = function() { this.Direction.Turn(-1); }
 
+    this.SetDirectionLeft = function()  { this.Direction.directionindex = 1; }
+    this.SetDirectionRight = function()  { this.Direction.directionindex = 5; }
+    this.SetDirectionUp = function()  { this.Direction.directionindex = 3; }
+    this.SetDirectionDown = function() { this.Direction.directionindex = 7; }
+
     this.RandomChange = function() { return Math.floor((Math.random() * 3) + 1) - 2; }
 
     this.TurnRandomly = function() {
@@ -37,7 +42,7 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
     this.MoveRandomly = function() {
         this.Move(this.RandomChange());
     }
-    
+
     this.TurnLeft = function() { this.Direction.Turn(1); },
     this.TurnRight = function() { this.Direction.Turn(-1); },
 

@@ -4,13 +4,13 @@ LM.Engine = {
 
     CreateCircle: function(positionX, positionY, color) {
         var circle = new createjs.Shape();
-       
+
         circle.Update = function(X, Y) {
             this.x = X;
             this.y = Y;
             LM.Engine.Stage.update();
         }
-        
+
         circle.graphics.beginFill(color).drawCircle(0, 0, 30);
         circle.x = positionX;
         circle.y = positionY;
@@ -26,15 +26,14 @@ LM.Engine = {
     Stage: null,
     Start: function() {
         this.Stage = new createjs.Stage("lmStage");
-        
+
         this.Player = new LM.LifeForm(250, 100, 5);
         this.NPC = new LM.LifeForm(350, 350, 5);
 
         this.CharCircle = LM.CreateSprite(250, 100); //= this.CreateCircle(250, 100, "blue", 2);
-        
+
         this.CharCircle.Update = function(X, Y) {
-            this.regX = X;
-            this.regY = Y;
+            this.setTransform(X, Y, 2, 2);
             LM.Engine.Stage.update();
         }
 
@@ -42,7 +41,7 @@ LM.Engine = {
 
         this.NPCCircle = this.CreateCircle(350, 350, "red");
         this.Stage.addChild(this.NPCCircle);
-        
+
         createjs.Ticker.setInterval(60);
 
         createjs.Ticker.addEventListener("tick", function(event) {
@@ -53,13 +52,23 @@ LM.Engine = {
         });
 
         window.onkeypress = function(event) {
+           /*
             if(event.keyCode == 119 || event.keyCode == 115) {
                 if(event.keyCode == 119) LM.Engine.Player.StepForward();
                 if(event.keyCode == 115) LM.Engine.Player.StepBackward();
-                LM.Engine.CharCircle.Update(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y) 
+                //LM.Engine.CharCircle.Update(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y)
+                LM.Engine.CharCircle.setTransform(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y, 2, 2);
             }
             if(event.keyCode == 97) LM.Engine.Player.TurnLeft();
             if(event.keyCode == 100) LM.Engine.Player.TurnRight();
+            */
+            if(event.keyCode == 115) LM.Engine.Player.SetDirectionUp();
+            else if(event.keyCode == 119) LM.Engine.Player.SetDirectionDown();
+            else if(event.keyCode == 97) LM.Engine.Player.SetDirectionLeft();
+            else if(event.keyCode == 100) LM.Engine.Player.SetDirectionRight();
+            LM.Engine.Player.StepForward();
+            LM.Engine.CharCircle.Update(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y)
+
         };
 
 

@@ -1,4 +1,4 @@
-LM.CreateSprite = function() {
+LM.CreateSprite = function(X, Y) {
 
      data = {
          // DEFINING FRAMERATE:
@@ -21,9 +21,9 @@ LM.CreateSprite = function() {
             // The 5th value is the image index per the list defined in "images" (defaults to 0).
             frames: [
                 // x, y, width, height, imageIndex, regX, regY
-                [0,0,12,21],
-                [12,0,12,21],
-                [24,0,12,21],
+                [0,0,12,21,0,0,0],
+                [12,0,12,21,0,0,0],
+                [24,0,12,21,0,0,0],
             ],
 
          // DEFINING ANIMATIONS:
@@ -47,8 +47,9 @@ LM.CreateSprite = function() {
      }
 
     var spriteSheet = new createjs.SpriteSheet(data);
-    var animation = new createjs.Sprite(spriteSheet, "stand");
-    
-    LM.Engine.Stage.addChild(animation);
+    var animation = new createjs.Sprite(spriteSheet, "run");
+    animation.setTransform(X, Y, 2, 2);
+
+    //LM.Engine.Stage.addChild(animation);
     return animation;
 }
