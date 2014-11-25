@@ -8,7 +8,6 @@ LM.Engine = {
         circle.Update = function(X, Y) {
             this.x = X;
             this.y = Y;
-            LM.Engine.Stage.update();
         }
 
         circle.graphics.beginFill(color).drawCircle(0, 0, 30);
@@ -20,27 +19,36 @@ LM.Engine = {
     Player: null,
     NPC: null,
 
-    CharCircle: null,
-    NPCCircle: null,
+    PlayerSprite: null,
+    NPCSprite: null,
 
     Stage: null,
+
     Start: function() {
         this.Stage = new createjs.Stage("lmStage");
+        var shape = new createjs.Shape();
+        this.Stage.addChild(shape);
+        var img = new Image();
+        img.src = "res/floors/floor_tile_1.png";
+        shape.graphics.clear()
+                .beginBitmapFill(img, "repeat")
+                .drawRect(0,0,1024,1024);
+  
+        this.Stage.update();
 
         this.Player = new LM.LifeForm(250, 100, 5);
         this.NPC = new LM.LifeForm(350, 350, 5);
 
-        this.CharCircle = LM.CreateSprite(250, 100); //= this.CreateCircle(250, 100, "blue", 2);
+        this.PlayerSprite = LM.CreateSprite(250, 100); //= this.CreateCircle(250, 100, "blue", 2);
 
-        this.CharCircle.Update = function(X, Y) {
+        this.PlayerSprite.Update = function(X, Y) {
             this.setTransform(X, Y, 2, 2);
-            LM.Engine.Stage.update();
         }
 
-        this.Stage.addChild(this.CharCircle);
+        this.Stage.addChild(this.PlayerSprite);
 
-        this.NPCCircle = this.CreateCircle(350, 350, "red");
-        this.Stage.addChild(this.NPCCircle);
+        this.NPCSprite = this.CreateCircle(350, 350, "red");
+        this.Stage.addChild(this.NPCSprite);
 
         createjs.Ticker.setInterval(60);
 
@@ -48,32 +56,34 @@ LM.Engine = {
             //console.log(createjs.Ticker.getTicks());
             LM.Engine.NPC.TurnRandomly();
             LM.Engine.NPC.StepForward();
-            LM.Engine.NPCCircle.Update(LM.Engine.NPC.Location.X, LM.Engine.NPC.Location.Y);
+            LM.Engine.NPCSprite.Update(LM.Engine.NPC.Location.X, LM.Engine.NPC.Location.Y);
+            LM.Engine.Stage.update();
         });
 
-        window.onkeypress = function(event) {
-           /*
-            if(event.keyCode == 119 || event.keyCode == 115) {
-                if(event.keyCode == 119) LM.Engine.Player.StepForward();
-                if(event.keyCode == 115) LM.Engine.Player.StepBackward();
-                //LM.Engine.CharCircle.Update(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y)
-                LM.Engine.CharCircle.setTransform(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y, 2, 2);
+        window.onkeyup = function(event) {
+            if(LM.Engine.PlayerSprite.running) {
+                LM.Engine.PlayerSprite.gotoAndPlay("stand");
+                LM.Engine.PlayerSprite.running = false;
             }
-            if(event.keyCode == 97) LM.Engine.Player.TurnLeft();
-            if(event.keyCode == 100) LM.Engine.Player.TurnRight();
-            */
+        }
+
+        window.onkeypress = function(event) {
+            //console.log(event.keyCode);
+            if(event.keyCode == 101) LM.Engine.PlayerSprite.gotoAndPlay("attack");
             if(event.keyCode == 115) LM.Engine.Player.SetDirectionUp();
             else if(event.keyCode == 119) LM.Engine.Player.SetDirectionDown();
             else if(event.keyCode == 97) LM.Engine.Player.SetDirectionLeft();
             else if(event.keyCode == 100) LM.Engine.Player.SetDirectionRight();
-            LM.Engine.Player.StepForward();
-            LM.Engine.CharCircle.Update(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y)
+            if((event.keyCode == 115) || (event.keyCode == 119) || (event.keyCode == 97) || (event.keyCode == 100)) { 
+                if(!LM.Engine.PlayerSprite.running) {
+                    LM.Engine.PlayerSprite.gotoAndPlay("run");
+                    LM.Engine.PlayerSprite.running = true;
+                }
+                LM.Engine.Player.StepForward();
+                LM.Engine.PlayerSprite.Update(LM.Engine.Player.Location.X, LM.Engine.Player.Location.Y)
+            }
 
         };
-
-
-
         this.Stage.update();
-
     }
 }
