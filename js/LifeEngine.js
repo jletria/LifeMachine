@@ -7,32 +7,30 @@ LM.Engine = {
         NPC: null
     },
     
-    Stage: null,
-    
-    InitStage: function() {
+    InitWorld: function() {
+        this.World = new LM.World(1024, 1024);
+
         this.Stage = new createjs.Stage("lmStage");
         var shape = new createjs.Shape();
         this.Stage.addChild(shape);
         var img = new Image();
         img.src = "res/floors/floor_tile_1.png";
-        shape.graphics.clear()
-        .beginBitmapFill(img, "repeat")
-        .drawRect(0, 0, 1024, 1024);
+        shape.graphics.clear().beginBitmapFill(img, "repeat").drawRect(0, 0, 1024, 1024);
     },
     
     InitLifeForms: function() {
         this.LifeForms.Player = new LM.LifeForm(250, 100, 5);
         this.LifeForms.Player.Sprite = LM.CreateSprite(250, 100);
-        this.LifeForms.Player.Sprite.Update = function(X, Y) {
-            this.setTransform(X, Y, 2, 2);
+        this.LifeForms.Player.Sprite.Update = function(X, Y) { 
+            this.setTransform(X, Y, 2, 2); 
         }
         
         this.LifeForms.NPC = new LM.LifeForm(350, 350, 5);
         this.LifeForms.NPC.Sprite = this.CreateCircle(350, 350, "red");
-        this.LifeForms.NPC.OnTick = function() {
+        this.LifeForms.NPC.OnTick.push(function() {
             this.TurnRandomly();
             this.StepForward();
-        }
+        });
         
         for(var i in this.LifeForms) this.Stage.addChild(this.LifeForms[i].Sprite);
     },
@@ -72,21 +70,13 @@ LM.Engine = {
     
     OnTick: function(event) {
         //console.log(createjs.Ticker.getTicks());
-        
-        for (var i in this.LifeForms) {
-            if (this.LifeForms.hasOwnProperty(i)) {
-                this.LifeForms[i].OnTick();
-                this.LifeForms[i].UpdateSprite();
-            }
-        }
+        for (var i in this.LifeForms) if (this.LifeForms.hasOwnProperty(i)) this.LifeForms[i].RunTickEvents();
         this.Stage.update();
     },
     
-    InitTicker: function() {
+    InitTime: function() {
         createjs.Ticker.setInterval(60);
-        createjs.Ticker.addEventListener("tick", function(event) {
-            LM.Engine.OnTick(event);
-        });
+        createjs.Ticker.addEventListener("tick", function(event) { LM.Engine.OnTick(event); });
     },
     
     InitEvents: function() {
@@ -102,21 +92,15 @@ LM.Engine = {
     },
     
     Start: function() {
-        this.InitStage();
+        this.InitWorld();
         this.InitLifeForms();
-        this.InitTicker();
+        this.InitTime();
         this.InitEvents();
     },
     
-    
-    
-    
     CreateCircle: function(positionX, positionY, color) {
         var circle = new createjs.Shape();
-        circle.Update = function(X, Y) {
-            this.x = X;
-            this.y = Y;
-        }
+        circle.Update = function(X, Y) { this.x = X; this.y = Y; }
         circle.graphics.beginFill(color).drawCircle(0, 0, 30);
         circle.x = positionX;
         circle.y = positionY;

@@ -1,3 +1,5 @@
+var LM = LM || {};
+
 LM.GenerateHorizontalSpriteMatrix = function(width, height, numberOfFrames) {
     frames = [];
     for(var i=0 ; i < numberOfFrames; i++) frames.push([width * i, 0, width, height, 0, 0, 0]);
