@@ -1,16 +1,18 @@
 
-LM.LifeForm = function(xLocation, yLocation, speed) { }
-
-LM.LifeForm.prototype = {
-    Location: {
+LM.LifeForm = function(xLocation, yLocation, speed) { 
+    this.Location = {
         X : xLocation,
         Y : yLocation
-    },
+    };
 
-    Health: 100,
-    Speed: 0,
-    Damage: 5,
-    APS: 1,   // Attacks per Second
+    this.Health = 100;
+    this.Speed = speed;
+    this.Damage = 5;
+    this.APS = 1;
+}
+
+LM.LifeForm.prototype = {
+    // Attacks per Second
 
     Direction: {
         directionindex: 0,
