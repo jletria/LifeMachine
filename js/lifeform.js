@@ -58,8 +58,28 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
         this.Move(-1);
     }
 
+    this.Moving = null
+
+    this.StartMoving = function() {
+        if(this.Moving == null) this.Moving = setInterval(function () { LM.Engine.LifeForms.Player.StepForward() }, 60);
+    }
+
+    this.StopMoving = function() {
+        clearInterval(this.Moving);
+        this.Moving = null;
+    }
+
     this.Move = function(direction) {
         this.Location.X += direction * this.Direction.WE() * this.Speed;
         this.Location.Y += direction * this.Direction.NS() * this.Speed;
+    }
+
+    this.UpdateSprite = function() {
+        if(this.Sprite == null) return; 
+        this.Sprite.Update(this.Location.X, this.Location.Y);
+    }
+
+    this.OnTick = function() {
+
     }
 }

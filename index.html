@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="js/dep/jquery-2.1.1.min.js"></script>
-    <script src="js/dep/underscore.js"></script>
-    <script src="js/dep/angular.min.js"></script>
-    <script src="js/dep/createjs.min.js"></script>
-    
-    <script src="js/lmEngine.js"></script>
-    <script src="js/lifeform.js"></script>
-    <script src="js/lifemachine.js"></script>
-    <script src="js/spriteTest.js"></script>
-    <style>
-        body { background-color : black; }
-    </style>
+    <head>
+        <script src="js/dep/jquery-2.1.1.min.js"></script>
+        <script src="js/dep/underscore.js"></script>
+        <script src="js/dep/angular.min.js"></script>
+        <script src="js/dep/createjs.min.js"></script>
 
-</head>
-<body onLoad="LM.Init();">
-    <canvas id="lmStage" width="1024" height="1024">Something's wrong</canvas>
-</body>
+        <script src="js/InputManager.js"></script>
+        <script src="js/CreateSprite.js"></script>
+        <script src="js/LifeForm.js"></script>
+        <script src="js/LifeEngine.js"></script>
+        <script src="js/LifeMachine.js"></script>
+
+        <style> body { background-color : black; } </style>
+
+    </head>
+    <body onLoad="LM.Init();">
+        <canvas id="lmStage" width="1024" height="1024"></canvas>
+    </body>
 </html>
 

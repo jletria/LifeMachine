@@ -4,11 +4,9 @@ LM.LoadScript = function(file) { $.ajax({ async: false, url: file, dataType: "sc
 
 LM.Init = function() {
     console.info('Starting LifeMachine...');
-    try {
-       LM.Engine.Start();
-    }
+    try { LM.Engine.Start(); }
     catch(ex) {
-        console.error('FATAL ERROR - LifeMachine terminated');
+        console.error('LifeMachine failed to start - ' + ex);
         throw ex;
     }
     console.info('LifeMachine running.');
