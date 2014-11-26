@@ -1,3 +1,9 @@
+LM.GenerateHorizontalSpriteMatrix = function(width, height, numberOfFrames) {
+    frames = [];
+    for(var i=0 ; i < numberOfFrames; i++) frames.push([width * i, 0, width, height, 0, 0, 0]);
+    return frames;
+}
+
 LM.CreateSprite = function(X, Y) {
 
      data = {
@@ -5,18 +11,19 @@ LM.CreateSprite = function(X, Y) {
         images: ["res/chars/Wizard.png"],
 
      // frames: {width:64, height:64, count:20, regX: 32, regY:64},
-        frames: [
+/*        frames: [
             // x, y, width, height, imageIndex, regX, regY
-
             [0, 0,36,37,0,0,0],
             [36,0,36,37,0,0,0],
             [72,0,36,37,0,0,0],
-            [108,0,36,37,0,0,0],
+            [108,0,36,37,0,0,0],ww
             [144, 0,36,37,0,0,0],
             [180,0,36,37,0,0,0],
             [216,0,36,37,0,0,0],
             [252,0,36,37,0,0,0]
         ],
+*/
+        frames: LM.GenerateHorizontalSpriteMatrix(36,37,8),
 
         animations: {
             // frames, start, end, next, speed

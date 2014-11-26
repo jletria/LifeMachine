@@ -34,28 +34,24 @@ LM.Engine = {
             this.StepForward();
         }
         
-        this.Stage.addChild(this.LifeForms.Player.Sprite);
-        this.Stage.addChild(this.LifeForms.NPC.Sprite);
+        for(var i in this.LifeForms) this.Stage.addChild(this.LifeForms[i].Sprite);
     },
     
     ActOnInput: function(keyCode, keydown) {
         if (keydown) {
-            if (keyCode == 69)
-                this.LifeForms.Player.Sprite.gotoAndPlay("attack");
-            if (keyCode == 83)
-                this.LifeForms.Player.SetDirectionUp();
-            else if (keyCode == 87)
-                this.LifeForms.Player.SetDirectionDown();
-            else if (keyCode == 65)
-                this.LifeForms.Player.SetDirectionLeft();
-            else if (keyCode == 68)
-                this.LifeForms.Player.SetDirectionRight();
-            
+            switch(keyCode) {
+                case 69: this.LifeForms.Player.Sprite.gotoAndPlay("attack"); break;
+
+                case 83: this.LifeForms.Player.SetDirectionUp();    break;
+                case 87: this.LifeForms.Player.SetDirectionDown();  break;
+                case 65: this.LifeForms.Player.SetDirectionLeft();  break;
+                case 68: this.LifeForms.Player.SetDirectionRight(); break;
+            }
             if (((keyCode == 87) || 
-            (keyCode == 83) || 
-            (keyCode == 65) || 
-            (keyCode == 68)) 
-            && (!this.LifeForms.Player.Running)) {
+                 (keyCode == 83) || 
+                 (keyCode == 65) || 
+                 (keyCode == 68)) 
+            && !this.LifeForms.Player.Running) {
                 this.LifeForms.Player.Running = true;
                 this.LifeForms.Player.Sprite.gotoAndPlay("run");
                 this.LifeForms.Player.StartMoving();
@@ -63,13 +59,13 @@ LM.Engine = {
         } 
         else {
             if (((keyCode == 87) || 
-            (keyCode == 83) || 
-            (keyCode == 65) || 
-            (keyCode == 68)) 
-            && (LM.Engine.LifeForms.Player.Running)) {
-                LM.Engine.LifeForms.Player.Running = false;
-                LM.Engine.LifeForms.Player.StopMoving();
-                LM.Engine.LifeForms.Player.Sprite.gotoAndPlay("stand");
+                 (keyCode == 83) || 
+                 (keyCode == 65) || 
+                 (keyCode == 68)) 
+            && this.LifeForms.Player.Running) {
+                this.LifeForms.Player.Running = false;
+                this.LifeForms.Player.StopMoving();
+                this.LifeForms.Player.Sprite.gotoAndPlay("stand");
             }
         }
     },
@@ -77,10 +73,10 @@ LM.Engine = {
     OnTick: function(event) {
         //console.log(createjs.Ticker.getTicks());
         
-        for (var property in this.LifeForms) {
-            if (this.LifeForms.hasOwnProperty(property)) {
-                this.LifeForms[property].OnTick();
-                this.LifeForms[property].UpdateSprite();
+        for (var i in this.LifeForms) {
+            if (this.LifeForms.hasOwnProperty(i)) {
+                this.LifeForms[i].OnTick();
+                this.LifeForms[i].UpdateSprite();
             }
         }
         this.Stage.update();
