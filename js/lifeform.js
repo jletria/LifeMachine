@@ -1,16 +1,18 @@
 
-LM.LifeForm = function(xLocation, yLocation, speed) {
-    this.Location = {
+LM.LifeForm = function(xLocation, yLocation, speed) { }
+
+LM.LifeForm.prototype = {
+    Location: {
         X : xLocation,
         Y : yLocation
-    }
+    },
 
-    this.Health = 100;
-    this.Speed = speed;
-    this.Damage = 5;
-    this.APS = 1;   // Attacks per Second
+    Health: 100,
+    Speed: 0,
+    Damage: 5,
+    APS: 1,   // Attacks per Second
 
-    this.Direction = {
+    Direction: {
         directionindex: 0,
         nsa: [-1, 0, 1, 1, 1, 0,-1,-1],
         wea: [-1,-1,-1, 0, 1, 1, 1, 0],
@@ -23,63 +25,63 @@ LM.LifeForm = function(xLocation, yLocation, speed) {
             if(this.directionindex == 8) this.directionindex = 0;
             if(this.directionindex == -1) this.directionindex = 7;
         }
-    }
+    },
 
-    this.TurnLeft = function() { this.Direction.Turn(1); }
-    this.TurnRight = function() { this.Direction.Turn(-1); }
+    TurnLeft: function() { this.Direction.Turn(1); },
+    TurnRight: function() { this.Direction.Turn(-1); },
 
-    this.SetDirectionLeft = function()  { this.Direction.directionindex = 1; }
-    this.SetDirectionRight = function()  { this.Direction.directionindex = 5; }
-    this.SetDirectionUp = function()  { this.Direction.directionindex = 3; }
-    this.SetDirectionDown = function() { this.Direction.directionindex = 7; }
+    SetDirectionLeft: function()  { this.Direction.directionindex = 1; },
+    SetDirectionRight: function()  { this.Direction.directionindex = 5; },
+    SetDirectionUp: function()  { this.Direction.directionindex = 3; },
+    SetDirectionDown: function() { this.Direction.directionindex = 7; },
 
-    this.RandomChange = function() { return Math.floor((Math.random() * 3) + 1) - 2; }
+    RandomChange: function() { return Math.floor((Math.random() * 3) + 1) - 2; },
 
-    this.TurnRandomly = function() {
+    TurnRandomly: function() {
         this.Direction.Turn(this.RandomChange());
-    }
+    },
 
-    this.MoveRandomly = function() {
+    MoveRandomly: function() {
         this.Move(this.RandomChange());
-    }
+    },
 
-    this.TurnLeft = function() { this.Direction.Turn(1); },
-    this.TurnRight = function() { this.Direction.Turn(-1); },
+    TurnLeft: function() { this.Direction.Turn(1); },
+    TurnRight: function() { this.Direction.Turn(-1); },
 
-    this.TurnRandomly = function() {
+    TurnRandomly: function() {
         this.Direction.Turn(Math.floor((Math.random() * 3) + 1) - 2);
-    }
+    },
 
-    this.StepForward = function() {
+    StepForward: function() {
         this.Move(1);
-    }
+    },
 
-    this.StepBackward = function() {
+    StepBackward: function() {
         this.Move(-1);
-    }
+    },
 
-    this.Moving = null
+    Moving: null,
 
-    this.StartMoving = function() {
+    StartMoving: function() {
         if(this.Moving == null) this.Moving = setInterval(function () { LM.Engine.LifeForms.Player.StepForward() }, 60);
-    }
+    },
 
-    this.StopMoving = function() {
+    StopMoving: function() {
         clearInterval(this.Moving);
         this.Moving = null;
-    }
+    },
 
-    this.Move = function(direction) {
+    Move: function(direction) {
         this.Location.X += direction * this.Direction.WE() * this.Speed;
         this.Location.Y += direction * this.Direction.NS() * this.Speed;
-    }
+    },
 
-    this.UpdateSprite = function() {
-        if(this.Sprite == null) return; 
+    UpdateSprite: function() {
+        if(this.Sprite == null) return;
         this.Sprite.Update(this.Location.X, this.Location.Y);
-    }
+    },
 
-    this.OnTick = function() {
+    OnTick: function() {
 
     }
 }
