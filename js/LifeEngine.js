@@ -19,14 +19,14 @@ LM.Engine = {
     },
     
     InitLifeForms: function() {
-        this.LifeForms.Player = new LM.LifeForm(this.World, 250, 100, 5);
+        this.LifeForms.Player = new LM.LifeForm(this.World, 250, 100, 250, 100, 5);
         this.LifeForms.Player.Sprite = LM.CreateSprite(250, 100);
         this.LifeForms.Player.Sprite.Update = function(X, Y) { 
             this.setTransform(X, Y, 2, 2); 
         }
         
-        this.LifeForms.NPC = new LM.LifeForm(this.World, 350, 350, 5);
-        this.LifeForms.NPC.Sprite = this.CreateCircle(350, 350, "red");
+        this.LifeForms.NPC = new LM.LifeForm(this.World, 350, 350, 50, 50, 5);
+        this.LifeForms.NPC.Sprite = this.CreateSquare(250, 100, 50, 50, "red");
         this.LifeForms.NPC.OnTick.push(function() {
             this.TurnRandomly();
             this.StepForward();
@@ -72,6 +72,15 @@ LM.Engine = {
         //console.log(createjs.Ticker.getTicks());
         for (var i in this.LifeForms) if (this.LifeForms.hasOwnProperty(i)) this.LifeForms[i].RunTickEvents();
         this.Stage.update();
+
+        var player = this.LifeForms.Player;
+        var npc = this.LifeForms.NPC;
+
+        if (player.Location.X < npc.Location.X + npc.Size.X  && player.Location.X + player.Size.X  > npc.Location.X &&
+		player.Location.Y < npc.Location.Y + npc.Size.Y && player.Location.Y + player.Location.Y > npc.Location.Y) {
+            console.log('TOUCHY!')
+        }
+        else console.log('NO TOUCHY!')
     },
     
     InitTime: function() {
@@ -105,5 +114,12 @@ LM.Engine = {
         circle.x = positionX;
         circle.y = positionY;
         return circle;
+    },
+
+    CreateSquare: function(positionX, positionY, sizeX, sizeY, color) {
+        var square = new createjs.Shape();
+        square.Update = function(X, Y) { this.x = X; this.y = Y; }
+        square.graphics.beginFill(color).drawRect(positionX, positionY, sizeX, sizeY);
+        return square;
     }
 }

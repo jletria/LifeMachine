@@ -1,7 +1,16 @@
 var LM = LM || {};
 
-LM.World = function(width, height) {
-    this.Height = height;
-    this.Width = width;
+LM.World = function(sizeX, sizeY) {
+    this.Size {
+        X: sizeX,
+        Y: sizeY
+    }
+   
+    this.Grid = [];
+
+    this.CheckPosition = function() //  
+    {
+        
+    }
 
 }

@@ -1,12 +1,17 @@
 var LM = LM || {};
 
-LM.LifeForm = function(world, xLocation, yLocation, speed) { 
+LM.LifeForm = function(world, xLocation, yLocation, xSize, ySize, speed) { 
     this.World = world;
 
     this.Location = {
         X : xLocation,
         Y : yLocation
     };
+
+    this.Size = {
+        X: xSize,
+        Y: ySize
+    }
 
     this.Moving = false;
 
