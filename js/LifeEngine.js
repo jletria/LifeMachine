@@ -19,13 +19,13 @@ LM.Engine = {
     },
     
     InitLifeForms: function() {
-        this.LifeForms.Player = new LM.LifeForm(250, 100, 5);
+        this.LifeForms.Player = new LM.LifeForm(this.World, 250, 100, 5);
         this.LifeForms.Player.Sprite = LM.CreateSprite(250, 100);
         this.LifeForms.Player.Sprite.Update = function(X, Y) { 
             this.setTransform(X, Y, 2, 2); 
         }
         
-        this.LifeForms.NPC = new LM.LifeForm(350, 350, 5);
+        this.LifeForms.NPC = new LM.LifeForm(this.World, 350, 350, 5);
         this.LifeForms.NPC.Sprite = this.CreateCircle(350, 350, "red");
         this.LifeForms.NPC.OnTick.push(function() {
             this.TurnRandomly();
