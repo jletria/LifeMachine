@@ -2,30 +2,18 @@ var LM = LM || {};
 
 LM.GenerateHorizontalSpriteMatrix = function(width, height, numberOfFrames) {
     frames = [];
-    for(var i=0 ; i < numberOfFrames; i++) frames.push([width * i, 0, width, height, 0, 0, 0]);
+    for(var i=0 ; i < numberOfFrames; i++) 
+        frames.push([width * i, 0, width, height, 0, 0, 0]);
     return frames;
 }
 
-LM.CreateSprite = function(X, Y) {
+LM.CreateSprite = function(bitmap, locationX, locationY, sizeX, sizeY) {
 
      data = {
         framerate: 20,
-        images: ["res/chars/Wizard.png"],
+        images: [bitmap],
 
-     // frames: {width:64, height:64, count:20, regX: 32, regY:64},
-/*        frames: [
-            // x, y, width, height, imageIndex, regX, regY
-            [0, 0,36,37,0,0,0],
-            [36,0,36,37,0,0,0],
-            [72,0,36,37,0,0,0],
-            [108,0,36,37,0,0,0],ww
-            [144, 0,36,37,0,0,0],
-            [180,0,36,37,0,0,0],
-            [216,0,36,37,0,0,0],
-            [252,0,36,37,0,0,0]
-        ],
-*/
-        frames: LM.GenerateHorizontalSpriteMatrix(36,37,8),
+        frames: LM.GenerateHorizontalSpriteMatrix(sizeX,sizeY,8),
 
         animations: {
             // frames, start, end, next, speed
@@ -37,6 +25,9 @@ LM.CreateSprite = function(X, Y) {
 
     var spriteSheet = new createjs.SpriteSheet(data);
     var animation = new createjs.Sprite(spriteSheet, "stand");
-    animation.setTransform(X, Y, 2, 2);
+    animation.x = locationX;
+    animation.y = locationY;
+    
+    //animation.setTransform(locationX, locationY, 2, 2);
     return animation;
 }
