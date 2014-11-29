@@ -30,15 +30,15 @@ LM.Engine = {
 
     InitLifeForms: function() {
 
-        this.LifeForms.Player = new LM.LifeForm(this.World, 200, 260, 60, 60, 5);
-        this.LifeForms.Player.Sprite = LM.CreateSprite(LM.Assets.Get('BlueWizard'), 200, 260,36,37);
+        this.LifeForms.Player = new LM.LifeForm(this.World, 200, 220, 60, 60, 5);
+        this.LifeForms.Player.Sprite = LM.CreateSprite(LM.Assets.Get('BlueWizard'), 200, 220,36,37);
         /*this.LifeForms.Player.Sprite.Update = function(X, Y) {
             //this.setTransform(X, Y, 1, 1);
         }*/
 
-        this.LifeForms.NPC = new LM.LifeForm(this.World, 200, 200, 60, 60, 5);
+        this.LifeForms.NPC = new LM.LifeForm(this.World, 550, 220, 60, 60, 5);
 
-		this.LifeForms.NPC.Sprite = LM.CreateSprite(LM.Assets.Get('DarkWizard'), 200, 200,36,37);
+		this.LifeForms.NPC.Sprite = LM.CreateSprite(LM.Assets.Get('DarkWizard'), 550, 220,36,37);
 
 
 
