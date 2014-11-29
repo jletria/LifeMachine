@@ -11,7 +11,7 @@ LM.CreateSprite = function(bitmap, locationX, locationY, sizeX, sizeY) {
 
      data = {
         framerate: 20,
-        images: [bitmap],
+        images: [ bitmap ],
 
         frames: LM.GenerateHorizontalSpriteMatrix(sizeX,sizeY,8),
 
@@ -28,6 +28,6 @@ LM.CreateSprite = function(bitmap, locationX, locationY, sizeX, sizeY) {
     animation.x = locationX;
     animation.y = locationY;
     
-    //animation.setTransform(locationX, locationY, 2, 2);
+    animation.setTransform(locationX, locationY, 2, 2);
     return animation;
 }
