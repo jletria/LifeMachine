@@ -32,12 +32,8 @@ LM.Engine = {
 
         this.LifeForms.Player = new LM.LifeForm(this.World, 200, 220, 60, 60, 5);
         this.LifeForms.Player.Sprite = LM.CreateSprite(LM.Assets.Get('BlueWizard'), 200, 220,36,37);
-        /*this.LifeForms.Player.Sprite.Update = function(X, Y) {
-            //this.setTransform(X, Y, 1, 1);
-        }*/
 
         this.LifeForms.NPC = new LM.LifeForm(this.World, 550, 220, 60, 60, 5);
-
 		this.LifeForms.NPC.Sprite = LM.CreateSprite(LM.Assets.Get('DarkWizard'), 550, 220,36,37);
 
 
@@ -87,6 +83,16 @@ LM.Engine = {
         }
     },
 
+    Collides: function(objectA, objectB) {
+		return 
+    	    (
+    	    objectA.Location.X < objectB.Location.X + objectB.Size.X  &&
+            objectA.Location.X + objectA.Size.X  > objectB.Location.X &&
+		    objectA.Location.Y < objectB.Location.Y + objectB.Size.Y &&
+		    objectA.Location.Y + objectA.Size.Y > objectB.Location.Y
+		    )
+    },
+
     OnTick: function(event) {
         //console.log(createjs.Ticker.getTicks());
         for (var i in this.LifeForms) if (this.LifeForms.hasOwnProperty(i)) this.LifeForms[i].RunTickEvents();
@@ -99,7 +105,9 @@ LM.Engine = {
             player.Location.X + player.Size.X  > npc.Location.X &&
 		    player.Location.Y < npc.Location.Y + npc.Size.Y &&
 		    player.Location.Y + player.Size.Y > npc.Location.Y
-		    ) {
+		    ) 
+			//if(this.Collides(player, npc))
+		    {
 		        npc.Sprite.gotoAndPlay("attack");
 		        player.Collision = true;
 		        npc.Collision = true;
