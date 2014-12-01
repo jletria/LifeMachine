@@ -25,7 +25,7 @@ LM.InitSprites = function () {
         return animation;
     }
 
-    ///////////////// WIZARD ABSTRACT
+    /// WIZARD ABSTRACT ///
 
     LM.Sprites.Wizard = function(locationX, locationY) {
         this.Size = {
@@ -45,7 +45,7 @@ LM.InitSprites = function () {
     };
     LM.Sprites.Wizard.prototype = Object.create(LM.Sprites.BaseSprite.prototype);
 
-    //////////////// BLUE WIZARD
+    /// BLUE WIZARD ///
 
     LM.Sprites.BlueWizard = function(locationX, locationY) {
         LM.Sprites.Wizard.call(this, locationX, locationY);
@@ -55,7 +55,7 @@ LM.InitSprites = function () {
     LM.Sprites.BlueWizard.prototype = Object.create(LM.Sprites.Wizard.prototype)
 
 
-    ////////////// DARK WIZARD
+    /// DARK WIZARD ///
 
     LM.Sprites.DarkWizard = function(locationX, locationY) {
         LM.Sprites.Wizard.call(this, locationX, locationY);
@@ -63,5 +63,15 @@ LM.InitSprites = function () {
         return this.Get();
     }
     LM.Sprites.DarkWizard.prototype = Object.create(LM.Sprites.Wizard.prototype)
+
+
+    /// MagicMissile ///
+    
+    LM.Sprites.MagicMissile = function(locationX, locationY) {
+        LM.Sprites.BaseSprite.call(this, locationX, locationY);
+        this.images = [ LM.Assets.Get('MagicMissile') ];
+        return this.Get();
+    }
+    LM.Sprites.MagicMissile.prototype = Object.create(LM.Sprites.BaseSprite.prototype)
 
 }

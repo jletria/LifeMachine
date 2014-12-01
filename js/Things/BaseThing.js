@@ -1,6 +1,8 @@
 var LM = LM || {};
+LM.Things = LM.Things || {};
 
-LM.LifeForm = function(world, xLocation, yLocation, xSize, ySize, speed) {
+
+LM.Things.Base = function(world, xLocation, yLocation, xSize, ySize, speed) {
     this.World = world;
 
     this.Location = {
@@ -48,7 +50,7 @@ LM.LifeForm = function(world, xLocation, yLocation, xSize, ySize, speed) {
 
 }
 
-LM.LifeForm.prototype = {
+LM.Things.Base.prototype = {
     RunTickEvents: function() { for(var f in this.OnTick) { this.OnTick[f].call(this); } },
 
     SetDirectionLeft: function()  { this.Direction.directionindex = 1; },

@@ -31,8 +31,8 @@ LM.Engine = {
 
     InitLifeForms: function() {
 
-        this.LifeForms.Player = new LM.BlueWizard(this.World, 200, 220, 60, 60, 5);
-        this.LifeForms.NPC = new LM.DarkWizard(this.World, 550, 220, 60, 60, 5);
+        this.LifeForms.Player = new LM.Things.LifeForms.BlueWizard(this.World, 200, 220, 60, 60, 5);
+        this.LifeForms.NPC = new LM.Things.LifeForms.DarkWizard(this.World, 550, 220, 60, 60, 5);
 
 		//this.LifeForms.Projectile = new LM.LifeForm(this.World, 350, 220, 8, 8, 5);
 		//this.LifeForms.Projectile.Sprite = LM.CreateSprite(LM.Assets.Get('MagicMissile'), 350, 220,8,8);
