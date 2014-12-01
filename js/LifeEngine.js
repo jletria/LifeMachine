@@ -7,6 +7,7 @@ LM.Engine = {
     LifeForms: {
         Player: null,
         NPC: null
+//        Projectile: null
     },
 
     Preload: function(onDone) { LM.Assets.Load(onDone); },
@@ -30,21 +31,15 @@ LM.Engine = {
 
     InitLifeForms: function() {
 
-        this.LifeForms.Player = new LM.LifeForm(this.World, 200, 220, 60, 60, 5);
-        this.LifeForms.Player.Sprite = LM.CreateSprite(LM.Assets.Get('BlueWizard'), 200, 220,36,37);
+        this.LifeForms.Player = new LM.BlueWizard(this.World, 200, 220, 60, 60, 5);
+        this.LifeForms.NPC = new LM.DarkWizard(this.World, 550, 220, 60, 60, 5);
 
-        this.LifeForms.NPC = new LM.LifeForm(this.World, 550, 220, 60, 60, 5);
-		this.LifeForms.NPC.Sprite = LM.CreateSprite(LM.Assets.Get('DarkWizard'), 550, 220,36,37);
-
-
-
-        //this.LifeForms.NPC.Sprite = this.CreateSquare(200, 200, 50, 50, "blue");
-        //this.LifeForms.NPC.Sprite = LM.CreateSprite("res/chars/DarkRedWizard.png", 200, 200,36,37);
+		//this.LifeForms.Projectile = new LM.LifeForm(this.World, 350, 220, 8, 8, 5);
+		//this.LifeForms.Projectile.Sprite = LM.CreateSprite(LM.Assets.Get('MagicMissile'), 350, 220,8,8);
 
         this.LifeForms.NPC.OnTick.push(function() {
            // this.TurnRandomly();
            // this.StepForward();
-
         });
 
         for(var i in this.LifeForms) this.Stage.addChild(this.LifeForms[i].Sprite);
@@ -138,6 +133,7 @@ LM.Engine = {
 
     Start: function() {
     	this.Preload(function() {
+    		LM.InitSprites();
 			LM.Engine.InitWorld();
 			LM.Engine.InitLifeForms();
 			LM.Engine.InitTime();
