@@ -10,6 +10,8 @@ LM.Engine = {
 //        Projectile: null
     },
 
+    Projectiles: [],
+
     Preload: function(onDone) { LM.Assets.Load(onDone); },
 
     InitWorld: function() {
@@ -32,6 +34,7 @@ LM.Engine = {
     InitLifeForms: function() {
 
         this.LifeForms.Player = new LM.Things.LifeForms.BlueWizard(this.World, 200, 220, 60, 60, 5);
+        this.LifeForms.Player.Direction.directionindex = 5;
         this.LifeForms.NPC = new LM.Things.LifeForms.DarkWizard(this.World, 550, 220, 60, 60, 5);
 
 		//this.LifeForms.Projectile = new LM.LifeForm(this.World, 350, 220, 8, 8, 5);
@@ -48,7 +51,16 @@ LM.Engine = {
     ActOnInput: function(keyCode, keydown) {
         if (keydown) {
             switch(keyCode) {
-                case 69: this.LifeForms.Player.Sprite.gotoAndPlay("attack"); break;
+                case 69: { 
+                	this.LifeForms.Player.Sprite.gotoAndPlay("attack"); 
+					var projectile = this.LifeForms.Player.Shoot();
+					
+					this.Stage.addChild(projectile.Sprite);
+					this.Projectiles.push(projectile);
+					projectile.Fire();
+                	
+                	break;
+                }
 
                 case 83: this.LifeForms.Player.SetDirectionUp();    break;
                 case 87: this.LifeForms.Player.SetDirectionDown();  break;
@@ -91,6 +103,7 @@ LM.Engine = {
     OnTick: function(event) {
         //console.log(createjs.Ticker.getTicks());
         for (var i in this.LifeForms) if (this.LifeForms.hasOwnProperty(i)) this.LifeForms[i].RunTickEvents();
+		for (var i in this.Projectiles) if (this.Projectiles.hasOwnProperty(i)) this.Projectiles[i].RunTickEvents();
 
         var player = this.LifeForms.Player;
         var npc = this.LifeForms.NPC;

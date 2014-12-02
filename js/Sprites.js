@@ -17,9 +17,9 @@ LM.InitSprites = function () {
         return frames;
     }
 
-    LM.Sprites.BaseSprite.prototype.Get = function() {
+    LM.Sprites.BaseSprite.prototype.Get = function(defaultAnimation) {
         var spriteSheet = new createjs.SpriteSheet(this);
-        var animation = new createjs.Sprite(spriteSheet, "stand");
+        var animation = new createjs.Sprite(spriteSheet, defaultAnimation);
         animation.x = this.Location.X; animation.y = this.Location.Y;
         animation.setTransform(this.Location.X, this.Location.Y, 2, 2);
         return animation;
@@ -50,7 +50,7 @@ LM.InitSprites = function () {
     LM.Sprites.BlueWizard = function(locationX, locationY) {
         LM.Sprites.Wizard.call(this, locationX, locationY);
         this.images = [ LM.Assets.Get('BlueWizard') ];
-        return this.Get();
+        return this.Get('stand');
     }
     LM.Sprites.BlueWizard.prototype = Object.create(LM.Sprites.Wizard.prototype)
 
@@ -60,7 +60,7 @@ LM.InitSprites = function () {
     LM.Sprites.DarkWizard = function(locationX, locationY) {
         LM.Sprites.Wizard.call(this, locationX, locationY);
         this.images = [ LM.Assets.Get('DarkWizard') ];
-        return this.Get();
+        return this.Get('stand');
     }
     LM.Sprites.DarkWizard.prototype = Object.create(LM.Sprites.Wizard.prototype)
 
@@ -68,9 +68,19 @@ LM.InitSprites = function () {
     /// MagicMissile ///
     
     LM.Sprites.MagicMissile = function(locationX, locationY) {
-        LM.Sprites.BaseSprite.call(this, locationX, locationY);
+        this.Size = {
+            X : 8,
+            Y : 8
+        },
+
+        this.NumberOfFrames = 256,
+        this.framerate = 20,
+        this.animations = {
+           burn: [0,255]
+        }
         this.images = [ LM.Assets.Get('MagicMissile') ];
-        return this.Get();
+        LM.Sprites.BaseSprite.call(this, locationX, locationY);
+        return this.Get('burn');
     }
     LM.Sprites.MagicMissile.prototype = Object.create(LM.Sprites.BaseSprite.prototype)
 
