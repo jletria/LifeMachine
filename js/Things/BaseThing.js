@@ -17,6 +17,9 @@ LM.Things.Base = function(world, xLocation, yLocation, xSize, ySize, speed) {
 
     this.Moving = false;
 
+    this.Visible = true;
+    this.Destroyed = false;
+
     this.Health = 100;
     this.Speed = speed;
     this.Damage = 5;
@@ -51,7 +54,9 @@ LM.Things.Base = function(world, xLocation, yLocation, xSize, ySize, speed) {
 }
 
 LM.Things.Base.prototype = {
-    RunTickEvents: function() { for(var f in this.OnTick) { this.OnTick[f].call(this); } },
+    RunTickEvents: function() { for(var f in this.OnTick) { 
+        this.OnTick[f].call(this); 
+    }},
 
     SetDirectionLeft: function()  { this.Direction.directionindex = 1; },
     SetDirectionRight: function()  { this.Direction.directionindex = 5; },

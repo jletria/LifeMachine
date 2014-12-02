@@ -4,13 +4,13 @@ LM.Engine = {
 
 	Loaded: false,
 
-    LifeForms: {
-        Player: null,
-        NPC: null
-//        Projectile: null
-    },
+	Player : {},
 
-    Projectiles: [],
+	NPC: [],
+	Projectiles: [],
+
+    Things: [], 
+
 
     Preload: function(onDone) { LM.Assets.Load(onDone); },
 
@@ -27,54 +27,50 @@ LM.Engine = {
         shape.x = 0;
         shape.y = 0;
 
-        //shape.graphics.clear();
         shape.graphics.beginBitmapFill(floorImg, "repeat").drawRect(0, 0, 800, 600);
     },
 
     InitLifeForms: function() {
 
-        this.LifeForms.Player = new LM.Things.LifeForms.BlueWizard(this.World, 200, 220, 60, 60, 5);
-        this.LifeForms.Player.Direction.directionindex = 5;
-        this.LifeForms.NPC = new LM.Things.LifeForms.DarkWizard(this.World, 550, 220, 60, 60, 5);
+        this.Player = new LM.Things.LifeForms.BlueWizard(this.World, 200, 220, 60, 60, 5);
+        this.Player.Direction.directionindex = 5;
+        this.Things.push(this.Player)
 
-		//this.LifeForms.Projectile = new LM.LifeForm(this.World, 350, 220, 8, 8, 5);
-		//this.LifeForms.Projectile.Sprite = LM.CreateSprite(LM.Assets.Get('MagicMissile'), 350, 220,8,8);
+        var npc = new LM.Things.LifeForms.DarkWizard(this.World, 550, 220, 60, 60, 5);
+       	this.NPC.push(npc);
+        this.Things.push(npc);
 
-        this.LifeForms.NPC.OnTick.push(function() {
+
+		this.NPC[0].OnTick.push(function() {
            // this.TurnRandomly();
            // this.StepForward();
         });
-
-        for(var i in this.LifeForms) this.Stage.addChild(this.LifeForms[i].Sprite);
     },
 
     ActOnInput: function(keyCode, keydown) {
         if (keydown) {
             switch(keyCode) {
                 case 69: { 
-                	this.LifeForms.Player.Sprite.gotoAndPlay("attack"); 
-					var projectile = this.LifeForms.Player.Shoot();
-					
-					this.Stage.addChild(projectile.Sprite);
+                	this.Player.Sprite.gotoAndPlay("attack"); 
+					var projectile = this.Player.Shoot();
 					this.Projectiles.push(projectile);
+					this.Things.push(projectile);
 					projectile.Fire();
-                	
+
                 	break;
                 }
 
-                case 83: this.LifeForms.Player.SetDirectionUp();    break;
-                case 87: this.LifeForms.Player.SetDirectionDown();  break;
-                case 65: this.LifeForms.Player.SetDirectionLeft();  break;
-                case 68: this.LifeForms.Player.SetDirectionRight(); break;
+                case 83: this.Player.SetDirectionUp();    break; case 87: this.Player.SetDirectionDown();  break;
+                case 65: this.Player.SetDirectionLeft();  break; case 68: this.Player.SetDirectionRight(); break;
             }
             if (((keyCode == 87) ||
                  (keyCode == 83) ||
                  (keyCode == 65) ||
                  (keyCode == 68))
-            && !this.LifeForms.Player.Running) {
-                this.LifeForms.Player.Running = true;
-                this.LifeForms.Player.Sprite.gotoAndPlay("run");
-                this.LifeForms.Player.StartMoving();
+            && !this.Player.Running) {
+                this.Player.Running = true;
+                this.Player.Sprite.gotoAndPlay("run");
+                this.Player.StartMoving();
             }
         }
         else {
@@ -82,48 +78,44 @@ LM.Engine = {
                  (keyCode == 83) ||
                  (keyCode == 65) ||
                  (keyCode == 68))
-            && this.LifeForms.Player.Running) {
-                this.LifeForms.Player.Running = false;
-                this.LifeForms.Player.StopMoving();
-                this.LifeForms.Player.Sprite.gotoAndPlay("stand");
+            && this.Player.Running) {
+                this.Player.Running = false;
+                this.Player.StopMoving();
+                this.Player.Sprite.gotoAndPlay("stand");
             }
         }
     },
 
     Collides: function(objectA, objectB) {
-		return 
-    	    (
-    	    objectA.Location.X < objectB.Location.X + objectB.Size.X  &&
+		return (
+			objectA.Location.X < objectB.Location.X + objectB.Size.X  &&
             objectA.Location.X + objectA.Size.X  > objectB.Location.X &&
 		    objectA.Location.Y < objectB.Location.Y + objectB.Size.Y &&
 		    objectA.Location.Y + objectA.Size.Y > objectB.Location.Y
-		    )
+		);
     },
 
     OnTick: function(event) {
         //console.log(createjs.Ticker.getTicks());
-        for (var i in this.LifeForms) if (this.LifeForms.hasOwnProperty(i)) this.LifeForms[i].RunTickEvents();
-		for (var i in this.Projectiles) if (this.Projectiles.hasOwnProperty(i)) this.Projectiles[i].RunTickEvents();
 
-        var player = this.LifeForms.Player;
-        var npc = this.LifeForms.NPC;
+        for (var i in this.Things) if (this.Things.hasOwnProperty(i)) {
+			if(this.Things[i].Visible && !this.Stage.contains(this.Things[i].Sprite)) this.Stage.addChild(this.Things[i].Sprite);
+			else if((!this.Things[i].Visible ||  this.Things[i].Destroyed) && this.Stage.contains(this.Things[i].Sprite)) this.Stage.removeChild(this.Things[i].Sprite);
+        	if(!this.Things[i].Destroyed) this.Things[i].RunTickEvents();
 
-        if (
-            player.Location.X < npc.Location.X + npc.Size.X  &&
-            player.Location.X + player.Size.X  > npc.Location.X &&
-		    player.Location.Y < npc.Location.Y + npc.Size.Y &&
-		    player.Location.Y + player.Size.Y > npc.Location.Y
-		    ) 
-			//if(this.Collides(player, npc))
-		    {
-		        npc.Sprite.gotoAndPlay("attack");
-		        player.Collision = true;
-		        npc.Collision = true;
-		    }
-		    else {
-                player.Collision = false;
-		        npc.Collision = false;
-		    }
+			for (var o in this.Things) if (this.Things.hasOwnProperty(o) && o != i) {
+				if (this.Collides(this.Things[i],this.Things[o])) {
+					//npc.Sprite.gotoAndPlay("attack");
+					this.Things[i].Collision = true;
+					this.Things[o].Collision = true;
+				}
+				else {
+					this.Things[i].Collision = false;
+					this.Things[o].Collision = false;
+				}
+			}
+        }
+
         this.Stage.update();
     },
 
