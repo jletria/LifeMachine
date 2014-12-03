@@ -1,7 +1,11 @@
 var LM = LM || {};
 LM.Things = LM.Things || {};
 
-LM.Things.ProtoThing = function(xLocation, yLocation, xSize, ySize) {
+LM.Things.ProtoThing = function(xLocation, yLocation, xSize, ySize, uid) {
+    this.UID = uid || _.uniqueId();
+    this.Destroyed = false;
+    this.IsPlayer = false;
+
     this.Location = {
         X : xLocation,
         Y : yLocation
@@ -19,7 +23,6 @@ LM.Things.Base = function(xLocation, yLocation, xSize, ySize, speed) {
     this.Moving = false;
 
     this.Visible = true;
-    this.Destroyed = false;
 
     this.Health = 100;
     this.Speed = speed;
@@ -60,6 +63,8 @@ LM.Things.Base.prototype = {
         this.OnTick[f].call(this); 
     }},
 
+    Destroy: function() { this.Destroyed = true; },
+
     SetDirectionLeft: function()  { this.Direction.directionindex = 1; },
     SetDirectionRight: function()  { this.Direction.directionindex = 5; },
     SetDirectionUp: function()  { this.Direction.directionindex = 3; },
@@ -81,20 +86,41 @@ LM.Things.Base.prototype = {
         if(this.MovingLock) return;
         this.MovingLock = true;
 
+        var intentions = new LM.Things.ProtoThing(this.Location.X, this.Location.Y, this.Size.X, this.Size.Y, this.UID);
+        intentions.Location.X += direction * this.Direction.WE() * this.Speed;
+        intentions.Location.Y += direction * this.Direction.NS() * this.Speed;
+        
+        var collidedWith = LM.Engine.GetCollisions(intentions);
 
-        var futureState = new LM.Things.ProtoThing(this.Location.X, this.Location.Y, this.Size.X, this.Size.Y);
-        futureState.Location.X += direction * this.Direction.WE() * this.Speed;
-        futureState.Location.Y += direction * this.Direction.NS() * this.Speed;
-        var collisions = LM.Engine.GetCollisions(futureState);
-        if(collisions.length == 1) {
-            this.Location.X = futureState.Location.X;
-            this.Location.Y = futureState.Location.Y;
-        }
-        else this.CollidedWith(collisions);
+        if(collidedWith.length == 0) this.OnNoCollision(intentions);
+        else this.OnCollision(intentions, collidedWith);
 
         this.MovingLock = false;
     },
 
+    OnCollision: function(intentions, collidedWith) {
+        var stopMovement = false;
+        for(var i in collidedWith) {
+            //if(collidedWith[i] instanceof LM.Things.LifeForms.Base) stopMovement = true;    
+            if(collidedWith[i].IsSolid) stopMovement = true;    
+            
+            if(collidedWith[i].HitBy) collidedWith[i].HitBy(this);
+        }
+        
+        if(stopMovement) return;
+        this.Location.X = intentions.Location.X;
+        this.Location.Y = intentions.Location.Y;
+    },
+
+    OnNoCollision: function(intentions) {
+        this.Location.X = intentions.Location.X;
+        this.Location.Y = intentions.Location.Y;
+    },
+
+    HitBy: function(hitBy) {
+        if(hitBy instanceof LM.Things.Projectiles.Base) console.log('Hit!');
+    },
+    
     UpdateSprite: function() {
         if(this.Sprite == null) return;
         this.Sprite.x = this.Location.X;
