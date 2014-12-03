@@ -1,10 +1,7 @@
 var LM = LM || {};
 LM.Things = LM.Things || {};
 
-
-LM.Things.Base = function(world, xLocation, yLocation, xSize, ySize, speed) {
-    this.World = world;
-
+LM.Things.ProtoThing = function(xLocation, yLocation, xSize, ySize) {
     this.Location = {
         X : xLocation,
         Y : yLocation
@@ -14,6 +11,10 @@ LM.Things.Base = function(world, xLocation, yLocation, xSize, ySize, speed) {
         X: xSize,
         Y: ySize
     }
+}
+
+LM.Things.Base = function(xLocation, yLocation, xSize, ySize, speed) {
+    LM.Things.ProtoThing.call(this, xLocation, yLocation, xSize, ySize);
 
     this.Moving = false;
 
@@ -48,9 +49,10 @@ LM.Things.Base = function(world, xLocation, yLocation, xSize, ySize, speed) {
             this.directionindex += direction;
             if(this.directionindex == 8) this.directionindex = 0;
             if(this.directionindex == -1) this.directionindex = 7;
-        }
+        },
     };
-
+    
+    this.CollidedWith = function(thing) {};
 }
 
 LM.Things.Base.prototype = {
@@ -78,14 +80,18 @@ LM.Things.Base.prototype = {
     Move: function(direction) {
         if(this.MovingLock) return;
         this.MovingLock = true;
-        this.Location.X += direction * this.Direction.WE() * this.Speed;
-        this.Location.Y += direction * this.Direction.NS() * this.Speed;
 
-        if(this.Collision) {
-            this.Moving = false;
-            this.Location.X -= direction * (this.Direction.WE() * 2) * this.Speed;
-            this.Location.Y -= direction * (this.Direction.NS() * 2) * this.Speed;
+
+        var futureState = new LM.Things.ProtoThing(this.Location.X, this.Location.Y, this.Size.X, this.Size.Y);
+        futureState.Location.X += direction * this.Direction.WE() * this.Speed;
+        futureState.Location.Y += direction * this.Direction.NS() * this.Speed;
+        var collisions = LM.Engine.GetCollisions(futureState);
+        if(collisions.length == 1) {
+            this.Location.X = futureState.Location.X;
+            this.Location.Y = futureState.Location.Y;
         }
+        else this.CollidedWith(collisions);
+
         this.MovingLock = false;
     },
 

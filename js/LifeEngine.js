@@ -11,11 +11,19 @@ LM.Engine = {
 
     Things: [], 
 
+    GetCollisions: function(thing) {
+		var ret = [];
+		for (var o in this.Things) 
+			if (this.Things.hasOwnProperty(o) && this.Things[o] !== thing)
+				if (this.Collides(thing,this.Things[o])) 
+					ret.push(this.Things[o]);
+		return ret;
+    },
+
 
     Preload: function(onDone) { LM.Assets.Load(onDone); },
 
     InitWorld: function() {
-        this.World = new LM.World(800, 600);
         this.Stage = new createjs.Stage("lmStage");
 
         var floorImg = LM.Assets.Get('Floor');
@@ -32,11 +40,11 @@ LM.Engine = {
 
     InitLifeForms: function() {
 
-        this.Player = new LM.Things.LifeForms.BlueWizard(this.World, 200, 220, 60, 60, 5);
+        this.Player = new LM.Things.LifeForms.BlueWizard(200, 220, 60, 60, 5);
         this.Player.Direction.directionindex = 5;
         this.Things.push(this.Player)
 
-        var npc = new LM.Things.LifeForms.DarkWizard(this.World, 550, 220, 60, 60, 5);
+        var npc = new LM.Things.LifeForms.DarkWizard(550, 220, 60, 60, 5);
        	this.NPC.push(npc);
         this.Things.push(npc);
 

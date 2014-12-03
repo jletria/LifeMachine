@@ -4,9 +4,8 @@ LM.Things.Projectiles = LM.Things.Projectiles || {};
 
 
 LM.Things.Projectiles.Base = function(shooter, xSize, ySize, speed) {
-    LM.Things.Base.call(this, shooter.World, shooter.Location.X, shooter.Location.Y + 30, xSize, ySize, speed);
+    LM.Things.Base.call(this, shooter.Location.X, shooter.Location.Y + 30, xSize, ySize, speed);
     this.Shooter = shooter;
-    this.World = shooter.World;
     this.Direction.directionindex = shooter.Direction.directionindex;
 
     
