@@ -1,10 +1,11 @@
 var LM = LM || {};
 LM.Things = LM.Things || {};
 
-LM.Things.ProtoThing = function(xLocation, yLocation, xSize, ySize, uid) {
+LM.Things.ProtoThing = function(xLocation, yLocation, xSize, ySize, isSolid, uid) {
     this.UID = uid || _.uniqueId();
     this.Destroyed = false;
     this.IsPlayer = false;
+    this.IsSolid = isSolid ? isSolid : true;
 
     this.Location = {
         X : xLocation,
@@ -19,6 +20,9 @@ LM.Things.ProtoThing = function(xLocation, yLocation, xSize, ySize, uid) {
 
 LM.Things.Base = function(xLocation, yLocation, xSize, ySize, speed) {
     LM.Things.ProtoThing.call(this, xLocation, yLocation, xSize, ySize);
+
+    this.Action = 'default';
+    this.ActionPlaying = 'default'
 
     this.Moving = false;
 
@@ -59,11 +63,15 @@ LM.Things.Base = function(xLocation, yLocation, xSize, ySize, speed) {
 }
 
 LM.Things.Base.prototype = {
+    TypeDescriptor: 'Unidentified object',
+
     RunTickEvents: function() { for(var f in this.OnTick) { 
         this.OnTick[f].call(this); 
     }},
 
-    Destroy: function() { this.Destroyed = true; },
+    Destroy: function() { 
+        this.Destroyed = true; 
+    },
 
     SetDirectionLeft: function()  { this.Direction.directionindex = 1; },
     SetDirectionRight: function()  { this.Direction.directionindex = 5; },
@@ -86,7 +94,9 @@ LM.Things.Base.prototype = {
         if(this.MovingLock) return;
         this.MovingLock = true;
 
-        var intentions = new LM.Things.ProtoThing(this.Location.X, this.Location.Y, this.Size.X, this.Size.Y, this.UID);
+        var intentions = new LM.Things.ProtoThing(
+            this.Location.X, this.Location.Y, this.Size.X, this.Size.Y, this.IsSolid, this.UID
+        );
         intentions.Location.X += direction * this.Direction.WE() * this.Speed;
         intentions.Location.Y += direction * this.Direction.NS() * this.Speed;
         
@@ -99,15 +109,18 @@ LM.Things.Base.prototype = {
     },
 
     OnCollision: function(intentions, collidedWith) {
-        var stopMovement = false;
+        var stop = false;
+        var cancel = true;
         for(var i in collidedWith) {
-            //if(collidedWith[i] instanceof LM.Things.LifeForms.Base) stopMovement = true;    
-            if(collidedWith[i].IsSolid) stopMovement = true;    
-            
+            if(this.Shooter && (collidedWith[i].UID == this.Shooter.UID))
+                continue;
+            else this.cancel = false
+
+            if(this.IsSolid && collidedWith[i].IsSolid) stop = true;    
             if(collidedWith[i].HitBy) collidedWith[i].HitBy(this);
         }
         
-        if(stopMovement) return;
+        if(stop || this.Destroyed) return;
         this.Location.X = intentions.Location.X;
         this.Location.Y = intentions.Location.Y;
     },
@@ -118,12 +131,22 @@ LM.Things.Base.prototype = {
     },
 
     HitBy: function(hitBy) {
-        if(hitBy instanceof LM.Things.Projectiles.Base) console.log('Hit!');
+        if(hitBy instanceof LM.Things.Projectiles.Base) 
+            console.log("I'm a "+ this.TypeDescriptor +" named " + this.UID + 
+            " and was hit by a "+ hitBy.TypeDescriptor + " named " + hitBy.UID + 
+            " shot by a "+ hitBy.Shooter.TypeDescriptor + " named " + hitBy.Shooter.UID +"!");
+        else 
+            console.log("I'm a "+ this.TypeDescriptor +" named " + this.UID + 
+            " and was touched by a "+ hitBy.TypeDescriptor + " named " + hitBy.UID);
     },
     
     UpdateSprite: function() {
         if(this.Sprite == null) return;
         this.Sprite.x = this.Location.X;
         this.Sprite.y = this.Location.Y;
+        if(this.Action != this.ActionPlaying) {
+            this.ActionPlaying = this.Action;
+            this.Sprite.gotoAndPlay(this.ActionPlaying);
+        }
     }
 }

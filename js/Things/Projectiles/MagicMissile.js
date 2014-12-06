@@ -3,6 +3,7 @@ LM.Things = LM.Things || {};
 LM.Things.Projectiles = LM.Things.Projectiles || {};
 
 LM.Things.Projectiles.MagicMissile = function(shooter) {
+    this.TypeDescriptor = 'Magic Missile';
     this.Sprite = new LM.Sprites.MagicMissile(shooter.Location.X, shooter.Location.Y);
     LM.Things.Projectiles.Base.call(this, shooter, 8, 8, 60);    
 } 

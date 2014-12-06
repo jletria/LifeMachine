@@ -16,6 +16,7 @@ LM.Things.LifeForms.Wizard.prototype = Object.create(LM.Things.LifeForms.Base.pr
 /// BlueWizard ///
 
 LM.Things.LifeForms.BlueWizard = function(xLocation, yLocation, xSize, ySize, speed) {
+    this.TypeDescriptor = 'Blue Wizard';
     this.Sprite = new LM.Sprites.BlueWizard();
     LM.Things.LifeForms.Wizard.call(this, xLocation, yLocation, xSize, ySize, speed);
 }
@@ -24,6 +25,7 @@ LM.Things.LifeForms.BlueWizard.prototype = Object.create(LM.Things.LifeForms.Wiz
 /// DarkWizard ///
 
 LM.Things.LifeForms.DarkWizard = function(xLocation, yLocation, xSize, ySize, speed) {
+    this.TypeDescriptor = 'Dark Wizard';
     this.Sprite = new LM.Sprites.DarkWizard();
     LM.Things.LifeForms.Wizard.call(this, xLocation, yLocation, xSize, ySize, speed);
 }

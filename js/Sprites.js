@@ -38,8 +38,9 @@ LM.InitSprites = function () {
         this.animations = {
             // frames, start, end, next, speed
             attack: { frames: [0,1,2,3,4,3,2,3,4,3,2,3,4,3,2,1] , next: "stand" },
-            run: [5,6],
-            stand: [7]
+            walk: [5,6],
+            stand: [7],
+            default: ["stand"]
         }
         LM.Sprites.BaseSprite.call(this, locationX, locationY);
     };
@@ -76,7 +77,8 @@ LM.InitSprites = function () {
         this.NumberOfFrames = 256,
         this.framerate = 20,
         this.animations = {
-           burn: [0,255]
+           burn: [0,255],
+           default: ["burn"]
         }
         this.images = [ LM.Assets.Get('MagicMissile') ];
         LM.Sprites.BaseSprite.call(this, locationX, locationY);

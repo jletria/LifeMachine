@@ -8,6 +8,7 @@ LM.Engine = {
     Things: [],
 
     Collides: function(objectA, objectB) {
+    	if(objectA.Destroyed || objectB.Destroyed) return false;
 		return (
 			objectA.Location.X < objectB.Location.X + objectB.Size.X  &&
             objectA.Location.X + objectA.Size.X  > objectB.Location.X &&
@@ -25,30 +26,44 @@ LM.Engine = {
 		return ret;
     },
 
+    RemoveSprite: function(thing) {
+		if(this.Stage.contains(thing.Sprite)) this.Stage.removeChild(thing.Sprite);
+    },
+
+    AddSprite: function(thing) {
+		if(!this.Stage.contains(thing.Sprite)) this.Stage.addChild(thing.Sprite);    	
+    },
+
     OnTick: function(event) {
         //console.log(createjs.Ticker.getTicks());
 		this.TickCount++;
         for (var i in this.Things) if (this.Things.hasOwnProperty(i)) {
-        	if(this.Things[i].Visible && !this.Things[i].Destroyed && !this.Stage.contains(this.Things[i].Sprite)) this.Stage.addChild(this.Things[i].Sprite);
-			else if((!this.Things[i].Visible ||  this.Things[i].Destroyed) && this.Stage.contains(this.Things[i].Sprite)) this.Stage.removeChild(this.Things[i].Sprite);
+        	if(this.Things[i].Visible && !this.Things[i].Destroyed) this.AddSprite(this.Things[i]);
+			else if(!this.Things[i].Visible ||  this.Things[i].Destroyed) this.RemoveSprite(this.Things[i]);
         	if(!this.Things[i].Destroyed && this.Things[i].RunTickEvents) this.Things[i].RunTickEvents();
         }
         this.Stage.update();
-        if(this.TickCount > 1000) this.Maintenance();
+        if(this.TickCount > 250) this.Maintenance();
     },
 
     Maintenance: function() {
-		var purgedThings = [];
-		for(var i in this.Things) if(!this.Things[i].Destroyed) purgedThings.push(this.Things[i]);
-		this.Things = purgedThings;
+    	console.log('Doing maintenance...');
 		this.TickCount = 0;
+		var activeThings = [];
+		for(var i in this.Things) {
+			if(!this.Things[i].Destroyed) activeThings.push(this.Things[i]);
+			else this.RemoveSprite(this.Things[i]);
+		}
+		var todelete = this.Things;
+		this.Things = activeThings;
+		delete todelete;
     },
 
     ActOnInput: function(keyCode, keydown) {
         if (keydown) {
             switch(keyCode) {
                 case 69: { 
-                	this.Player.Sprite.gotoAndPlay("attack"); 
+                	this.Player.Attack(); 
 					var projectile = this.Player.Shoot();
 					this.Things.push(projectile);
 					projectile.Fire();
@@ -58,19 +73,12 @@ LM.Engine = {
                 case 83: this.Player.SetDirectionUp();    break; case 87: this.Player.SetDirectionDown();  break;
                 case 65: this.Player.SetDirectionLeft();  break; case 68: this.Player.SetDirectionRight(); break;
             }
-            if (((keyCode == 87) || (keyCode == 83) || (keyCode == 65) || (keyCode == 68))
-            && !this.Player.Running) {
-                this.Player.Running = true;
-                this.Player.Sprite.gotoAndPlay("run");
-                this.Player.StartMoving();
-            }
+            if ((keyCode == 87) || (keyCode == 83) || (keyCode == 65) || (keyCode == 68)) 
+            	this.Player.Walk();
         }
         else {
-            if (((keyCode == 87) || (keyCode == 83) || (keyCode == 65) || (keyCode == 68))
-            && this.Player.Running) {
-                this.Player.Running = false;
-                this.Player.StopMoving();
-                this.Player.Sprite.gotoAndPlay("stand");
+            if ((keyCode == 87) || (keyCode == 83) || (keyCode == 65) || (keyCode == 68)) {
+                this.Player.Stop();
             }
         }
     },
